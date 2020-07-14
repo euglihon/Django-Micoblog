@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}My blog{% endblock %}
+
+{% block content %}
+    <h1></h1>
+
+    {% for post in posts %}
+        <h2>
+            {# get_absolute_url Функция из models класса Post для загрущки функции post_detail  из views #}
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </h2>
+        <p class="date">Published {{ post.publish }} by {{ post.author }}</p>
+        {# truncatechars:30 Обрезка до 30 символов #}
+        <p>{{ post.body|truncatechars:30 }}</p>
+    {% endfor %}
+
+    {# подключаем блок пагинации #}
+    {% include 'pagination.html' with page=page_obj %}
+{% endblock %}
