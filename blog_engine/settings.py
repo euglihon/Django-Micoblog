@@ -119,3 +119,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# заглушка для локального тестирования email отправки
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# настройка SMTP сервера
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'admin@gmail.com'
+# EMAIL_HOST_PASSWORD = 'qwerty'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'admin@gmail.com'
+EMAIL_HOST_PASSWORD = 'qwerty'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
+
+# тестирование отправки через shell
+# from django.core.mail import send_mail
+# send_mail('title mail', 'body mail', 'admin@gmail.com', ['alina@gmail.com'], fail_silently=False)

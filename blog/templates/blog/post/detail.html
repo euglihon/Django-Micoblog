@@ -6,4 +6,6 @@
     <h1>{{ post.title }}</h1>
     <p>Published {{ post.publish }} by {{ post.author }}</p>
     <p>{{ post.body }}</p>
+    {# динамическое формирование ссылок на функцию с передачей значения #}
+    <a href="{% url 'blog:post_share' post.id %}">Share this post</a>
 {% endblock %}
