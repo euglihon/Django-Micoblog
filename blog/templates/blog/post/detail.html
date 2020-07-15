@@ -8,4 +8,32 @@
     <p>{{ post.body }}</p>
     {# динамическое формирование ссылок на функцию с передачей значения #}
     <a href="{% url 'blog:post_share' post.id %}">Share this post</a>
+
+    {# Отоброжение коментариев #}
+    {# Получаем количество комментариев через встроенную функцию count #}
+    <h2>{{ comments.count }} comment</h2>
+
+    {% for comment in comments %}
+        <div>
+            <p>
+                {# forloop.counter --- получение номера итерации (номер комментария) #}
+                Comment {{ forloop.counter }} by {{ comment.name }} {{ comment.created }}
+            </p>
+            <p>
+                {{ comment.body|linebreaks }}
+            </p>
+        </div>
+    {% endfor %}
+
+    {# Отображение формы комментариев #}
+    {% if new_comment != None %}
+        <h2>Your comment has been added.</h2>
+    {% else %}
+        <h2>Comment form</h2>
+        <form action="" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <input type="submit" value="Add comment">
+        </form>
+    {% endif %}
 {% endblock %}
