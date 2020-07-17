@@ -14,9 +14,11 @@
         {% block content %}
         {% endblock %}
     </div>
-  <!--  <div class="slider">
-        <h2>My blog</h2>
-        <p>This is my blog</p>
-    </div>   -->
+
+    <div class="slider">
+        <h2>My blog title</h2>
+        <p>This is my blog body</p>
+        <a href="{% url "blog:post_feed" %}">Subscribe to my RSS feed</a>
+    </div>
 </body>
 </html>
