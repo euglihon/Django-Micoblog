@@ -1,38 +1,51 @@
+# from django.views.generic import ListView # базовый класс обработчик
+# from django.shortcuts import render, redirect
+
 from django.core.mail import send_mail
-from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
 from .forms import EmailPostForm, CommentFrom
 from .models import Post
-from django.views.generic import ListView # базовый класс обработчик
+from taggit.models import Tag
+from django.db.models import Count # функция БД для подсчёта количества
 
 
-# def post_list(request):
-#     # запрос через собственный менеджер
-#     posts = Post.published.all()
-#     # Создаём объект пагинации
-#     paginator = Paginator(posts, 3)  # по три поста на странице
-#     # из GET запроса получаем текущую страницу
-#     page = request.GET.get('page')
-#
-#     try:
-#         # если все ок
-#         posts = paginator.page(page)
-#     except PageNotAnInteger:
-#         # если страница не является целым числом
-#         posts = paginator.page(1)
-#     except EmptyPage:
-#         # если номер страницы больше чем число страниц, вернем последнею
-#         posts = paginator.page(paginator.num_pages)
-#
-#     return render(request, 'blog/post/list.html', {'page': page,
-#                                                    'posts': posts})
-class PostListView(ListView):
-    # обработчик через базовый класс, а не функцию
-    queryset = Post.published.all()
-    context_object_name = 'posts'
-    paginate_by = 3
-    template_name = 'blog/post/list.html'
+def post_list(request, tag_slug=None):
+    posts = Post.published.all()
+
+    # Фильтрация постов по тегам
+    tag = None
+    if tag_slug:
+        # если передастся слаг тега
+        # формируем начальный массив
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        # формируем посты по полученным тегам
+        posts = posts.filter(tags__in=[tag])
+
+    # Создаём объект пагинации
+    paginator = Paginator(posts, 3)  # по три поста на странице
+    # из GET запроса получаем текущую страницу
+    page = request.GET.get('page')
+
+    try:
+        # если все ок
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # если страница не является целым числом
+        posts = paginator.page(1)
+    except EmptyPage:
+        # если номер страницы больше чем число страниц, вернем последнею
+        posts = paginator.page(paginator.num_pages)
+
+    return render(request, 'blog/post/list.html', {'page': page,
+                                                   'posts': posts,
+                                                   'tag': tag})
+# class PostListView(ListView):
+#     # обработчик через базовый класс, а не функцию
+#     queryset = Post.published.all()
+#     context_object_name = 'posts'
+#     paginate_by = 3
+#     template_name = 'blog/post/list.html'
 
 
 def post_detail(request, year, month, day, post):
@@ -58,10 +71,23 @@ def post_detail(request, year, month, day, post):
             new_comment.save()
     else:
         comment_form = CommentFrom()
+
+    # Реализация блока рекомендованных постов
+    # запись в массив всех ID тегов,   flat=True --- плоский массив
+    post_tags_id = post.tags.values_list('id', flat=True)
+    # получаем все статьи у которых есть хоть один тег полученный раньше из массива
+    similar_posts = Post.published.filter(tags__in=post_tags_id)
+    # исключаем текущую статью из списка
+    similar_posts = similar_posts.exclude(id=post.id)
+    # формируем поле, которое содержит количество совпадений.
+    # сортируем список по количеству совпадение и оставляем только 4 результата
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
+
     return render(request, 'blog/post/detail.html', {'post': post,
                                                      'comments': comments,
                                                      'new_comment': new_comment,
-                                                     'comment_form': comment_form})
+                                                     'comment_form': comment_form,
+                                                     'similar_posts': similar_posts})
 
 
 def post_share(request, post_id):

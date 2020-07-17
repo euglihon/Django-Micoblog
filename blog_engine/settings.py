@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog.apps.BlogConfig'    # регистрация приложения BlogConfig--- класс в apps.py в котором создан 'Blog'
+    'blog.apps.BlogConfig',    # регистрация приложения BlogConfig--- класс в apps.py в котором создан 'Blog'
+    'taggit' # внешний менеджер для тегировангия постов
 ]
 
 MIDDLEWARE = [

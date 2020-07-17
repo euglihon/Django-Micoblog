@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User # пользователи админки django
 from django.urls import reverse
+from taggit.managers import TaggableManager # менеджер тегирования постов
 
 
 class PublishedManager(models.Manager):
@@ -24,6 +25,9 @@ class Post(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOISES, default='draft')  # choices - возможные значения
     # внешний ключ.  models.CASCADE--- при удалении пользв. удаляться и его статьи
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+
+    # тегирование постов через внешний модуль. Теги хранятся в массиве
+    tags = TaggableManager()
 
     objects = models.Manager() # Менеджер по умолчанию
     published = PublishedManager() # Новый менеджер
@@ -58,3 +62,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.name} on {self.post}'
+
+

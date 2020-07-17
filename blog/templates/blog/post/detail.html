@@ -9,10 +9,19 @@
     {# динамическое формирование ссылок на функцию с передачей значения #}
     <a href="{% url 'blog:post_share' post.id %}">Share this post</a>
 
+
+    {# Блок показа похожих постов #}
+    <div>
+        <h2>Similar posts</h2>
+        {% for similar_post in similar_posts %}
+            <a href="{{ similar_post.slug }}">{{ similar_post.title }}</a>
+        {% endfor %}
+    </div>
+
+
     {# Отоброжение коментариев #}
     {# Получаем количество комментариев через встроенную функцию count #}
     <h2>{{ comments.count }} comment</h2>
-
     {% for comment in comments %}
         <div>
             <p>
