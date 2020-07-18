@@ -1,4 +1,4 @@
-# Django-Microblog
+# Django-Blog
 ### Прототип движка блога на Python Django.
 
 ##### На данный момент реализовано:
