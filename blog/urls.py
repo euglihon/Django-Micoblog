@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from .feeds import LatestPostFeed
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 # определяем пространство имен, для групировки
@@ -16,4 +18,5 @@ urlpatterns = [
     # путь к rss фиду
     path('feed/', LatestPostFeed(), name='post_feed'),
     path('search/', views.post_search, name='post_search')
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

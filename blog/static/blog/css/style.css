@@ -1,0 +1,14 @@
+body {
+    background-color: #fdfdfc;
+}
+
+
+.x-shadow-fade-in {
+    transition-property: box-shadow;
+    transition-duration: .33s;
+    transition-timing-function: ease-out;
+}
+
+.shadow-lg, .shadow.x-shadow-fade-in:hover, .x-shadow-fade-in.shadow-sm:hover {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,0.175) !important;
+}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',    # регистрация приложения BlogConfig--- класс в apps.py в котором создан 'Blog'
     'taggit', # внешний менеджер для тегировангия постов
     'django.contrib.postgres', # для поиска при помощи postgres
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,6 @@ EMAIL_USE_TLS = False
 # тестирование отправки через shell
 # from django.core.mail import send_mail
 # send_mail('title mail', 'body mail', 'admin@gmail.com', ['alina@gmail.com'], fail_silently=False)
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

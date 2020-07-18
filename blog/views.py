@@ -21,7 +21,7 @@ def post_list(request, tag_slug=None):
         posts = posts.filter(tags__in=[tag])
 
     # Создаём объект пагинации
-    paginator = Paginator(posts, 3)  # по три поста на странице
+    paginator = Paginator(posts, 4)  # по три поста на странице
     # из GET запроса получаем текущую страницу
     page = request.GET.get('page')
 

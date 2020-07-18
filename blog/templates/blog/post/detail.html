@@ -1,14 +1,15 @@
 {% extends 'blog/base.html' %}
 
+
 {% block title %}{{ post.title }}{% endblock %}
+
 
 {% block content %}
     <h1>{{ post.title }}</h1>
     <p>Published {{ post.publish }} by {{ post.author }}</p>
-    <p>{{ post.body }}</p>
+    <p class="lead pr-lg-5 text-muted">{{ post.body }}</p>
     {# динамическое формирование ссылок на функцию с передачей значения #}
     <a href="{% url 'blog:post_share' post.id %}">Share this post</a>
-
 
     {# Блок показа похожих постов #}
     <div>
@@ -34,6 +35,7 @@
         </div>
     {% endfor %}
 
+
     {# Отображение формы комментариев #}
     {% if new_comment != None %}
         <h2>Your comment has been added.</h2>
@@ -46,3 +48,4 @@
         </form>
     {% endif %}
 {% endblock %}
+
